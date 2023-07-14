@@ -1,0 +1,349 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+public class Calcolatrice extends JFrame
+{
+        private JTextField riga;
+        private String rigaText = "";
+        private JButton b[] = new JButton[10];
+        private JButton piu;
+        private JButton meno;
+        private JButton per;
+        private JButton diviso;
+        private JButton uguale;
+        private JButton canc;
+        private JButton punto;
+        private boolean sommaB = false;
+        private boolean sottrazioneB = false;
+        private boolean moltiplicazioneB = false;
+        private boolean divisioneB = false;
+        private boolean flagS = false;
+        private boolean flagD = false;
+        private boolean flagM = false;
+        private JPanel tastiera;
+        private double somma = 0;
+        private int risInt;
+        public Calcolatrice()
+        {
+                super("Calcolatrice DF");
+                setSize(210,200);
+                setLocationRelativeTo(null);
+                setResizable(false);
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+                riga = new JTextField();
+                riga.setEnabled(false);
+                riga.setDisabledTextColor(Color.BLACK);
+                riga.setFont(new Font("Serif",Font.PLAIN,14));
+                add(riga,BorderLayout.NORTH);
+
+                tastiera = new JPanel();
+                tastiera.setLayout(new GridLayout(4,4));
+
+                Font font = new Font("Serif",Font.PLAIN,18);
+                piu = new JButton("+");
+                piu.setFont(font);
+                meno = new JButton("-");
+                meno.setFont(font);
+                per = new JButton("x");
+                per.setFont(font);
+                diviso = new JButton(":");
+                diviso.setFont(font);
+                uguale = new JButton("=");
+                uguale.setFont(font);
+                canc = new JButton("Cancella");
+                punto = new JButton(".");
+                punto.setFont(font);
+
+                ButtonHandler handler = new ButtonHandler();
+
+                piu.addActionListener(handler);
+                meno.addActionListener(handler);
+                per.addActionListener(handler);
+                diviso.addActionListener(handler);
+                uguale.addActionListener(handler);
+                canc.addActionListener(handler);
+                punto.addActionListener(handler);
+
+                for (int i=0;i<10;i++)
+                {
+                        b[i] = new JButton(""+i);
+                        b[i].addActionListener(handler);
+                }
+
+                tastiera.add(b[1]);
+                tastiera.add(b[2]);
+                tastiera.add(b[3]);
+                tastiera.add(piu);
+                tastiera.add(b[4]);
+                tastiera.add(b[5]);
+                tastiera.add(b[6]);
+                tastiera.add(meno);
+                tastiera.add(b[7]);
+                tastiera.add(b[8]);
+                tastiera.add(b[9]);
+                tastiera.add(per);
+                tastiera.add(b[0]);
+                tastiera.add(punto);
+                tastiera.add(uguale);
+                tastiera.add(diviso);
+
+                add(tastiera);
+                add(canc,BorderLayout.SOUTH);
+
+                setVisible(true);
+        }
+        private class ButtonHandler implements ActionListener
+        {
+                public void actionPerformed(ActionEvent event)
+                {
+                        if (event.getSource() == canc)
+                        {
+                                rigaText = "";
+                                riga.setText("");
+                                somma = 0;
+                                sommaB = false;
+                                sottrazioneB = false;
+                                moltiplicazioneB = false;
+                                divisioneB = false;
+                                flagS = false;
+                                flagD = false;
+                                flagM = false;
+                        }
+                        else if (event.getSource() == piu)
+                        {
+                                if (sommaB == true)
+                                {
+                                        somma += Double.valueOf(riga.getText()).doubleValue();
+                                        sommaB = false;
+                                }
+                                else if (moltiplicazioneB == true)
+                                {
+                                        somma *= Double.valueOf(riga.getText()).doubleValue();
+                                        moltiplicazioneB = false;
+                                }
+                                else if (sottrazioneB == true)
+                                {
+                                        somma -= Double.valueOf(riga.getText()).doubleValue();
+                                        sottrazioneB = false;
+                                }
+                                else if (divisioneB == true)
+                                {
+                                        somma /= Double.valueOf(riga.getText()).doubleValue();
+                                        divisioneB = false;
+                                }
+                                else
+                                {
+                                        somma += Double.valueOf(riga.getText()).doubleValue();
+                                }
+                                risInt = (int)somma;
+                                if ((somma>risInt)&&(somma<risInt+1))
+                                {
+                                        riga.setText(String.format("%f",somma));
+                                }
+                                else
+                                {
+                                        riga.setText(""+risInt);
+                                }
+                                rigaText = "";
+                                sommaB = true;
+                                sottrazioneB = false;
+                                moltiplicazioneB = false;
+                                divisioneB = false;
+                        }
+                        else if (event.getSource() == meno)
+                        {
+                                if (sommaB == true)
+                                {
+                                        somma += Double.valueOf(riga.getText()).doubleValue();
+                                        sommaB = false;
+                                }
+                                else if (moltiplicazioneB == true)
+                                {
+                                        somma *= Double.valueOf(riga.getText()).doubleValue();
+                                        moltiplicazioneB = false;
+                                }
+                                else if (sottrazioneB == true)
+                                {
+                                        somma -= Double.valueOf(riga.getText()).doubleValue();
+                                        sottrazioneB = false;
+                                }
+                                else if (divisioneB == true)
+                                {
+                                        somma /= Double.valueOf(riga.getText()).doubleValue();
+                                        divisioneB = false;
+                                }
+                                else if (flagS == false)
+                                {
+                                        somma = Double.valueOf(riga.getText()).doubleValue();
+                                        flagS = true;
+                                }
+
+                                else
+                                {
+                                        somma -= Double.valueOf(riga.getText()).doubleValue();
+                                }
+                                risInt = (int)somma;
+                                if ((somma>risInt)&&(somma<risInt+1))
+                                {
+                                        riga.setText(String.format("%f",somma));
+                                }
+                                else
+                                {
+                                        riga.setText(""+risInt);
+                                }
+                                rigaText = "";
+                                sommaB = false;
+                                sottrazioneB = true;
+                                moltiplicazioneB = false;
+                                divisioneB = false;
+                        }
+                        else if (event.getSource() == per)
+                        {
+                                if (sommaB == true)
+                                {
+                                        somma += Double.valueOf(riga.getText()).doubleValue();
+                                        sommaB = false;
+                                }
+                                else if (moltiplicazioneB == true)
+                                {
+                                        somma *= Double.valueOf(riga.getText()).doubleValue();
+                                        moltiplicazioneB = false;
+                                }
+                                else if (sottrazioneB == true)
+                                {
+                                        somma -= Double.valueOf(riga.getText()).doubleValue();
+                                        sottrazioneB = false;
+                                }
+                                else if (divisioneB == true)
+                                {
+                                        somma /= Double.valueOf(riga.getText()).doubleValue();
+                                        divisioneB = false;
+                                }
+                                else
+                                {
+                                        if (flagM == false)
+                                        {
+                                                somma = 1;
+                                                flagM = true;
+                                        }
+                                        somma *= Double.valueOf(riga.getText()).doubleValue();
+                                }
+                                risInt = (int)somma;
+                                if ((somma>risInt)&&(somma<risInt+1))
+                                {
+                                        riga.setText(String.format("%f",somma));
+                                }
+                                else
+                                {
+                                        riga.setText(""+risInt);
+                                }
+                                rigaText = "";
+                                sommaB = false;
+                                sottrazioneB = false;
+                                moltiplicazioneB = true;
+                                divisioneB = false;
+                        }
+                        else if (event.getSource() == diviso)
+                        {
+                                if (sommaB == true)
+                                {
+                                        somma += Double.valueOf(riga.getText()).doubleValue();
+                                        sommaB = false;
+                                }
+                                else if (moltiplicazioneB == true)
+                                {
+                                        somma *= Double.valueOf(riga.getText()).doubleValue();
+                                        moltiplicazioneB = false;
+                                }
+                                else if (sottrazioneB == true)
+                                {
+                                        somma -= Double.valueOf(riga.getText()).doubleValue();
+                                        sottrazioneB = false;
+                                }
+                                else if (divisioneB == true)
+                                {
+                                        somma /= Double.valueOf(riga.getText()).doubleValue();
+                                        divisioneB = false;
+                                }
+                                else if (flagD == false)
+                                {
+                                        somma = Double.valueOf(riga.getText()).doubleValue();
+                                        flagD = true;
+                                }
+                                else
+                                {
+                                        somma /= Double.valueOf(riga.getText()).doubleValue();
+                                }
+                                risInt = (int)somma;
+                                if ((somma>risInt)&&(somma<risInt+1))
+                                {
+                                        riga.setText(String.format("%f",somma));
+                                }
+                                else
+                                {
+                                        riga.setText(""+risInt);
+                                }
+                                rigaText = "";
+                                sommaB = false;
+                                sottrazioneB = false;
+                                moltiplicazioneB = false;
+                                divisioneB = true;
+                        }
+                        else if (event.getSource() == punto)
+                        {
+                                rigaText += ".";
+                                riga.setText(rigaText);
+                        }
+                        else if (event.getSource() == uguale)
+                        {
+                                if (sommaB == true)
+                                {
+                                        somma += Double.valueOf(riga.getText()).doubleValue();
+                                        sommaB = false;
+                                }
+                                else if (sottrazioneB == true)
+                                {
+                                        somma -= Double.valueOf(riga.getText()).doubleValue();
+                                        sottrazioneB = false;
+                                }
+                                else if (moltiplicazioneB == true)
+                                {
+                                        somma *= Double.valueOf(riga.getText()).doubleValue();
+                                        moltiplicazioneB = false;
+                                }
+                                else if (divisioneB == true)
+                                {
+                                        somma /= Double.valueOf(riga.getText()).doubleValue();
+                                        divisioneB = false;
+                                }
+                                risInt = (int)somma;
+                                if ((somma>risInt)&&(somma<risInt+1))
+                                {
+                                        riga.setText(String.format("%f",somma));
+                                }
+                                else
+                                {
+                                        riga.setText(""+risInt);
+                                }
+                                rigaText = "";
+                                somma = 0;
+                        }
+                        else
+                        {
+                                for (int i=0;i<10;i++)
+                                {
+                                        if (event.getSource() == b[i])
+                                        {
+                                                rigaText += ""+i;
+                                                riga.setText(rigaText);
+                                        }
+                                }
+                        }
+                }
+        }
+        public static void main(String[] args)
+        {
+                new Calcolatrice();
+        }
+}
