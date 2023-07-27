@@ -1,18 +1,30 @@
-pipeline {
+pipeline 
+  {
   agent any
-  stages {
-    stage('Download source code') {
-      steps {
-        // Replace "your-repo" with the name of your repository and "v1.0.0" with the version you want to build
-        git url: "https://github.com/tudefenestrador/myownrepo.git", branch: "second"
+    stages 
+    {
+      stage('Build Docker Image') 
+      {
+      steps 
+        {
+          script 
+          {
+            docker.withRegistry('https://registry.example.com', 'docker-credentials') 
+            {
+            def 
+              customImage = docker.build("my_nginx_hello_world:${env.BUILD_NUMBER}")
+              customImage.push()
+             }
+           }
+          }
+        }
       }
-    }
-    stage('Build') {
-      steps {
-        // Replace this with the command(s) to build your software
-        sh 'make'
+      post 
+      {
+        always 
+        {
+            // Cleanup: Remove Docker images and containers
+            sh 'docker rmi my_nginx_hello_world:${env.BUILD_NUMBER} || true'
+        }
       }
-    }
-  }
-}
-
+     }
